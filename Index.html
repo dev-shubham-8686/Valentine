@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For My Baby, My Love, My Forever</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Great+Vibes&family=Quicksand:wght@300;500&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background: linear-gradient(135deg, #ffe4e6 0%, #fecaca 50%, #f9a8d4 100%);
+            font-family: 'Quicksand', sans-serif;
+            overflow-x: hidden;
+            margin: 0;
+            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="red"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>'), auto;
+        }
+
+        .cursive {
+            font-family: 'Great Vibes', cursive;
+        }
+
+        .dancing {
+            font-family: 'Dancing Script', cursive;
+        }
+
+        .heart {
+            position: fixed;
+            top: -10vh;
+            transform: translateY(0);
+            animation: fall linear forwards;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(110vh) rotate(360deg);
+            }
+        }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+        }
+
+        .floating {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .gradient-text {
+            background: linear-gradient(to right, #e11d48, #db2777);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        #noBtn {
+            position: absolute;
+            transition: all 0.3s ease;
+        }
+
+        .pulse-heart {
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .hidden-section {
+            display: none;
+            opacity: 0;
+            transition: opacity 1s ease-in;
+        }
+
+        .reveal {
+            display: block !important;
+            opacity: 1 !important;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-center p-4">
+
+    <!-- Floating Hearts Container -->
+    <div id="hearts-container"></div>
+
+    <!-- Main Entry Section -->
+    <div id="entry" class="z-10 text-center glass p-8 rounded-3xl max-w-lg w-full transform transition duration-500 hover:scale-105">
+        <h1 class="dancing text-5xl mb-6 gradient-text">Hey My Love... ❤️</h1>
+        <p class="text-gray-700 text-lg mb-8 leading-relaxed">
+            I’ve been holding onto a feeling that’s too big for just words. You are the rhythm in my heart and the peace in my soul. 🥺✨
+        </p>
+        <button onclick="revealLetter()" class="bg-rose-500 text-white px-8 py-3 rounded-full font-bold shadow-lg hover:bg-rose-600 transition-all transform hover:scale-110 active:scale-95">
+            Open My Heart 💌
+        </button>
+    </div>
+
+    <!-- The Love Letter Section -->
+    <div id="letter" class="hidden-section z-10 text-center glass p-10 rounded-3xl max-w-2xl w-full my-10">
+        <h2 class="cursive text-4xl mb-6 text-rose-600">To My Beautiful Baby,</h2>
+        <div class="space-y-4 text-gray-800 text-lg leading-relaxed text-left italic">
+            <p>"From the moment you walked into my life, everything changed. You aren't just my girlfriend; you are my home. 🏠💖"</p>
+            <p>"I love the way you laugh, the way you look at me when you're sleepy, and the way you make even the hardest days feel like a dream. You are my soulmate, my best friend, and my everything. 🫂✨"</p>
+            <p>"I promise to hold you when you cry, to laugh with you until our stomachs hurt, and to love you more with every single breath I take. I am yours, forever and always. 💍🌹"</p>
+        </div>
+        <button onclick="goToProposal()" class="mt-10 bg-pink-500 text-white px-10 py-4 rounded-full font-bold shadow-xl hover:shadow-2xl transition-all pulse-heart">
+            Click here, if you love me... 🥺
+        </button>
+    </div>
+
+    <!-- The Final Proposal Section -->
+    <div id="proposal" class="hidden-section z-10 text-center glass p-12 rounded-3xl max-w-xl w-full relative min-h-[400px]">
+        <div class="mb-6 text-7xl floating">💍</div>
+        <h1 class="dancing text-6xl mb-8 gradient-text">Will You Be Mine Forever?</h1>
+        <p class="text-rose-700 font-medium mb-10">Will you let me love you for the rest of our lives? 🥺❤🫂</p>
+        
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-6" id="btnContainer">
+            <button id="yesBtn" onclick="accepted()" class="bg-green-500 text-white px-12 py-4 rounded-full text-2xl font-bold shadow-lg hover:bg-green-600 transform transition-all hover:scale-125 z-20">
+                YES! A thousand times Yes! 😍
+            </button>
+            <button id="noBtn" onmouseover="moveNo()" onclick="moveNo()" class="bg-gray-400 text-white px-8 py-4 rounded-full font-bold shadow-md cursor-not-allowed">
+                No 😢
+            </button>
+        </div>
+    </div>
+
+    <!-- Success Celebration -->
+    <div id="success" class="hidden-section z-10 text-center glass p-10 rounded-3xl max-w-lg w-full">
+        <h1 class="cursive text-6xl mb-4 text-rose-600">I Love You So Much! 😭❤</h1>
+        <p class="text-2xl mb-6">Come here and give me that hug! 🫂✨</p>
+        <div class="text-8xl mb-6">👩‍❤️‍👨</div>
+        <p class="italic text-gray-600">"You have made me the happiest person on Earth. Happy Propose Day, My Life." 🌹💍</p>
+        <div class="mt-8 flex justify-center gap-4">
+            <span class="text-4xl">💖</span>
+            <span class="text-4xl">👑</span>
+            <span class="text-4xl">✨</span>
+        </div>
+    </div>
+
+    <script>
+        // Create falling hearts background
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('heart');
+            heart.innerHTML = '❤️';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = Math.random() * 3 + 2 + 's';
+            heart.style.fontSize = Math.random() * 20 + 10 + 'px';
+            heart.style.opacity = Math.random();
+            document.getElementById('hearts-container').appendChild(heart);
+
+            setTimeout(() => {
+                heart.remove();
+            }, 5000);
+        }
+
+        setInterval(createHeart, 300);
+
+        function revealLetter() {
+            document.getElementById('entry').classList.add('hidden');
+            const letter = document.getElementById('letter');
+            letter.classList.add('reveal');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function goToProposal() {
+            document.getElementById('letter').classList.remove('reveal');
+            document.getElementById('letter').classList.add('hidden');
+            const prop = document.getElementById('proposal');
+            prop.classList.add('reveal');
+        }
+
+        function moveNo() {
+            const btn = document.getElementById('noBtn');
+            const x = Math.random() * (window.innerWidth - btn.offsetWidth - 50);
+            const y = Math.random() * (window.innerHeight - btn.offsetHeight - 50);
+            
+            btn.style.position = 'fixed';
+            btn.style.left = x + 'px';
+            btn.style.top = y + 'px';
+            
+            // Make "Yes" button bigger every time they try to hit "No"
+            const yesBtn = document.getElementById('yesBtn');
+            const currentSize = parseFloat(window.getComputedStyle(yesBtn).fontSize);
+            yesBtn.style.fontSize = (currentSize + 5) + 'px';
+            yesBtn.style.padding = '20px 40px';
+        }
+
+        function accepted() {
+            document.getElementById('proposal').classList.remove('reveal');
+            document.getElementById('proposal').classList.add('hidden');
+            const success = document.getElementById('success');
+            success.classList.add('reveal');
+            
+            // Trigger massive heart burst
+            for(let i=0; i<100; i++) {
+                setTimeout(createHeart, i * 20);
+            }
+        }
+    </script>
+</body>
+</html>
