@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>For My Baby, My Love, My Forever</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;500;800&family=Dancing+Script:wght@700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #ff2d55;
+            --secondary: #ff37a6;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background: #05010a;
+            color: white;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            overflow: hidden;
+            touch-action: manipulation;
+        }
+
+        canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .step {
+            display: none;
+            opacity: 0;
+            transform: scale(0.95);
+            transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .step.active {
+            display: flex;
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .btn-gradient {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            box-shadow: 0 10px 25px rgba(255, 45, 85, 0.3);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn-gradient:active {
+            transform: scale(0.95);
+        }
+
+        .no-btn {
+            transition: all 0.2s ease-out;
+            white-space: nowrap;
+        }
+
+        .text-glow {
+            text-shadow: 0 0 15px rgba(255, 45, 85, 0.6);
+        }
+
+        /* Responsive Typography */
+        .title-size { font-size: clamp(2.5rem, 10vw, 5rem); }
+        .sub-size { font-size: clamp(1.1rem, 4vw, 1.5rem); }
+
+        #bg-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, transparent 0%, #05010a 90%);
+            z-index: 1;
+            pointer-events: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="bg-overlay"></div>
+
+    <div class="relative z-10 w-full min-h-[100dvh] flex items-center justify-center p-4 md:p-8">
+        
+        <!-- Step 0: Initial Hook -->
+        <div id="step-0" class="step active flex-col items-center text-center w-full max-w-lg">
+            <div class="mb-6 animate-bounce">
+                <svg width="60" height="60" viewBox="0 0 24 24" fill="var(--primary)" class="md:w-20 md:h-20">
+                    <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                </svg>
+            </div>
+            <h1 class="title-size font-extrabold mb-4 tracking-tight italic">Hey <span class="text-[#ff2d55]">Baby...</span></h1>
+            <p class="sub-size text-gray-300 mb-8 font-light">I have a secret I've been keeping in my heart. Want to see it?</p>
+            <button onclick="nextStep(1)" class="btn-gradient w-full py-4 rounded-full text-lg font-bold">Open My Heart 💌</button>
+        </div>
+
+        <!-- Step 1: Deep Emotion -->
+        <div id="step-1" class="step flex-col items-center text-center w-full max-w-2xl">
+            <h2 class="font-['Dancing_Script'] text-3xl md:text-5xl text-[#ff2d55] mb-6">To My Beautiful Love...</h2>
+            <div class="glass p-6 md:p-10 rounded-3xl text-left space-y-4 md:space-y-6">
+                <p class="text-lg md:text-xl leading-relaxed italic">"You are the dopamine that makes my life colorful. Every second with you feels like a dream I never want to wake up from."</p>
+                <p class="text-base md:text-lg text-gray-300">You are my soulmate, my best friend, and my favorite person in the entire world. I am yours, completely. 🫂❤️</p>
+            </div>
+            <button onclick="nextStep(2)" class="mt-8 btn-gradient w-full py-4 rounded-full text-lg font-bold">I have a question... 🥺</button>
+        </div>
+
+        <!-- Step 2: The Propose Day Climax -->
+        <div id="step-2" class="step flex-col items-center text-center w-full max-w-4xl relative">
+            <h1 class="title-size font-black mb-8 leading-tight">Will You Be <br><span class="text-glow text-[#ff2d55]">Mine Forever?</span></h1>
+            
+            <div class="flex flex-col items-center justify-center gap-4 w-full relative" id="btn-container">
+                <button id="yes-btn" onclick="nextStep(3)" class="btn-gradient w-full max-w-xs py-5 rounded-full text-2xl font-black z-50 order-1">
+                    YES! 😍
+                </button>
+                <button id="no-btn" onmouseover="moveNo()" onclick="moveNo()" ontouchstart="moveNo()" class="no-btn bg-white/10 border border-white/20 px-8 py-3 rounded-full font-bold order-2">
+                    No 😢
+                </button>
+            </div>
+        </div>
+
+        <!-- Step 3: Happy Ending -->
+        <div id="step-3" class="step flex-col items-center text-center w-full max-w-lg">
+            <div class="text-7xl md:text-9xl mb-6">👩‍❤️‍💋‍👨</div>
+            <h1 class="text-4xl md:text-6xl font-black text-glow text-[#ff2d55] mb-4">I LOVE YOU! ❤️</h1>
+            <p class="text-xl mb-6">You've made me the happiest person ever.</p>
+            <div class="glass p-6 rounded-2xl w-full">
+                <p class="italic text-gray-300 text-sm md:text-base">"I promise to love you, cherish you, and always keep you safe in my arms. Happy Propose Day, My Life." 🌹💍</p>
+            </div>
+            <p class="mt-8 uppercase tracking-widest text-xs text-gray-500 animate-pulse">Now come give me a hug! 🫂</p>
+        </div>
+
+    </div>
+
+    <script>
+        let scene, camera, renderer, hearts = [];
+
+        function initThree() {
+            scene = new THREE.Scene();
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            renderer.setPixelRatio(window.devicePixelRatio);
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            document.body.appendChild(renderer.domElement);
+
+            const heartShape = new THREE.Shape();
+            const x = 0, y = 0;
+            heartShape.moveTo( x + 5, y + 5 );
+            heartShape.bezierCurveTo( x + 5, y + 5, x + 4, y, x, y );
+            heartShape.bezierCurveTo( x - 6, y, x - 6, y + 7,x - 6, y + 7 );
+            heartShape.bezierCurveTo( x - 6, y + 11, x - 3, y + 15.4, x + 5, y + 19 );
+            heartShape.bezierCurveTo( x + 12, y + 15.4, x + 16, y + 11, x + 16, y + 7 );
+            heartShape.bezierCurveTo( x + 16, y + 7, x + 16, y, x + 10, y );
+            heartShape.bezierCurveTo( x + 7, y, x + 5, y + 5, x + 5, y + 5 );
+
+            const geometry = new THREE.ExtrudeGeometry(heartShape, { depth: 1, bevelEnabled: true, bevelSize: 0.5, bevelThickness: 0.5 });
+            
+            const heartCount = window.innerWidth < 768 ? 30 : 60;
+            for(let i=0; i<heartCount; i++) {
+                const material = new THREE.MeshPhongMaterial({ color: i % 2 === 0 ? 0xff2d55 : 0xff37a6 });
+                const mesh = new THREE.Mesh(geometry, material);
+                mesh.position.set(Math.random() * 400 - 200, Math.random() * 400 - 200, Math.random() * 400 - 400);
+                mesh.rotation.x = Math.random() * Math.PI;
+                mesh.scale.set(0.4, 0.4, 0.4);
+                scene.add(mesh);
+                hearts.push(mesh);
+            }
+
+            const light = new THREE.PointLight(0xffffff, 1.2, 1000);
+            light.position.set(0, 0, 100);
+            scene.add(light);
+            scene.add(new THREE.AmbientLight(0x404040));
+            camera.position.z = 100;
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            hearts.forEach(h => {
+                h.rotation.y += 0.01;
+                h.position.y += 0.15;
+                if(h.position.y > 200) h.position.y = -200;
+            });
+            renderer.render(scene, camera);
+        }
+
+        let currentStep = 0;
+        let noCount = 0;
+
+        function nextStep(step) {
+            const current = document.getElementById(`step-${currentStep}`);
+            current.classList.remove('active');
+            setTimeout(() => {
+                current.style.display = 'none';
+                currentStep = step;
+                const next = document.getElementById(`step-${step}`);
+                next.style.display = 'flex';
+                setTimeout(() => next.classList.add('active'), 50);
+            }, 600);
+        }
+
+        function moveNo() {
+            const btn = document.getElementById('no-btn');
+            const yes = document.getElementById('yes-btn');
+            
+            // Generate random position within safe viewport bounds
+            const x = Math.random() * (window.innerWidth - btn.offsetWidth - 40) + 20;
+            const y = Math.random() * (window.innerHeight - btn.offsetHeight - 40) + 20;
+            
+            btn.style.position = 'fixed';
+            btn.style.left = x + 'px';
+            btn.style.top = y + 'px';
+            btn.style.zIndex = "100";
+
+            noCount++;
+            if(noCount <= 10) {
+                const scale = 1 + (noCount * 0.15);
+                yes.style.transform = `scale(${scale})`;
+            }
+            
+            const noTexts = ["No 😢", "Are you sure?", "Baby pls...", "Don't do this!", "I'm crying 😭", "Wrong button!", "Click YES!"];
+            btn.innerText = noTexts[Math.min(noCount, noTexts.length - 1)];
+        }
+
+        window.onload = () => { initThree(); animate(); };
+        window.onresize = () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        };
+    </script>
+</body>
+</html>
